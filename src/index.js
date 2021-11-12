@@ -13,12 +13,13 @@ article:document.querySelector('.country-info'),
 ref.input.addEventListener('input',debounce(searchCantry,DEBOUNCE_DELAY));
 
 function searchCantry(){
-fetchCountries(ref.input.value)
-  .then(data => {console.log(data);   
+  const searchRequest=ref.input.value.trim();
+  if(searchRequest!=="") {
+fetchCountries(searchRequest)
+  .then(data => {  
     if(data.length===1){
       watchCantry(...data)
     }else if(data.length>10){
-      console.log('10======');
       Notify.info("Too many matches found. Please enter a more specific name.");
       writeList('');
       writeBoxContry('');
@@ -30,11 +31,11 @@ fetchCountries(ref.input.value)
     if(error=="Error: 404"){
       writeList('');
       writeBoxContry('');
-      Notify.failure("Oops, there is no country with that name"); 
+      return Notify.failure("Oops, there is no country with that name"); 
     }
             console.log(error);
         });
-
+}
 }
  function watchCantry(cantry){
   writeList('');
